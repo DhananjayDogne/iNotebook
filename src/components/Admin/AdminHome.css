@@ -1,0 +1,43 @@
+/* AdminHome.css */
+.admin-home-container {
+    width: 80%;
+    margin: 0 auto;
+    padding: 40px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 50px;
+    text-align: center;
+}
+
+.admin-home-container h2 {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 30px;
+}
+
+.admin-options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.admin-btn {
+    padding: 15px 30px;
+    font-size: 1.2rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 200px;
+    margin: 0 auto;
+}
+
+.admin-btn:hover {
+    background-color: #4caf50;
+    color: white;
+}
+
+.admin-btn:focus {
+    outline: none;
+}

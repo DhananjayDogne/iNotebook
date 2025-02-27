@@ -14,7 +14,8 @@ import NoteState from "./context/notes/NoteState";
 import { AddNote } from "./components/AddNote";
 import { Users } from "./components/Admin/Users";
 import { Contacts } from "./components/Admin/Contacts";
-
+import { EditUser } from "./components/Admin/EditUser";
+import { AdminHome } from "./components/Admin/AdminHome";
 
 function App() {
   return (
@@ -30,8 +31,10 @@ function App() {
             <Route path="/signup" element={<Signuppage />}></Route>
 
             {/* Admin Route */}
+            <Route path="/admin" element={<AdminHome />} /> 
             <Route path="/admin/userlist" element={<Users />}></Route>
             <Route path="/admin/contact/:id" element={<Contacts />}></Route>
+            <Route path="/admin/edituser/:id" element={<EditUser />} />
 
           </Routes>
         </Router>
