@@ -6,9 +6,19 @@ const GroupSchema = new Schema({
         type: String,
         required: true
     },
+    createdBy:{
+        type: Schema.Types.ObjectId,
+        ref: 'user',
+        required: true
+    },
     userlist: [{
         type: Schema.Types.ObjectId,
         ref: 'user', 
+        required: true
+    }],
+    contacts: [{
+        type: Schema.Types.ObjectId,
+        ref: 'contacts', 
         required: true
     }],
     date: {

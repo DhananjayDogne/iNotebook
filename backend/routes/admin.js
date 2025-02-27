@@ -5,6 +5,7 @@ const checkadmin = require('../middleware/checkadmin');
 const { body, validationResult } = require('express-validator');
 const Contact = require('../models/Contact');
 const User = require('../models/User');
+const Group = require('../models/Group');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -85,5 +86,17 @@ router.delete('/deleteuser/:id', fetchuser, async (req, res) => {
         return res.status(500).send("Internal Server Error");
     }
 })
+
+
+// Get all groups
+router.get('/getallgroup', async (req, res) => {
+    try {
+        const groups = await Group.find({});
+        res.status(200).json(groups);
+    } catch (error) {
+        res.status(400).json({ message: 'Error fetching groups', error });
+    }
+});
+
 
 module.exports = router;

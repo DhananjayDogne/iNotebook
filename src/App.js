@@ -16,6 +16,8 @@ import { Users } from "./components/Admin/Users";
 import { Contacts } from "./components/Admin/Contacts";
 import { EditUser } from "./components/Admin/EditUser";
 import { AdminHome } from "./components/Admin/AdminHome";
+import { Groups } from "./components/Admin/Groups";
+import GroupContact  from "./components/Admin/GroupContact";
 
 function App() {
   return (
@@ -29,6 +31,8 @@ function App() {
             <Route path="/about" element={<About />}></Route>
             <Route path="/login" element={<Login />}></Route>
             <Route path="/signup" element={<Signuppage />}></Route>
+            <Route path="/group" element={<Groups />} />
+            <Route path="/group/contact/:id" element={<GroupContact />} />
 
             {/* Admin Route */}
             <Route path="/admin" element={<AdminHome />} /> 

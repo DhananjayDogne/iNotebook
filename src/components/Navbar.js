@@ -17,7 +17,8 @@ export const Navbar = () => {
             <div className='logo'>CM</div>
             <div className='links'>
                 <Link className={`link ${location.pathname==='/'? "active": ""}`}   to='/'>Home</Link>
-                <Link className={`link ${location.pathname==='/about'?  "active": ""}`}  to='/about'>About</Link>
+                <Link className={`link ${location.pathname === '/about' ? "active" : ""}`} to='/about'>About</Link>
+                <Link className={`link ${location.pathname === '/group' ? "active" : ""}`} to='/group'>Groups</Link>
             </div>
             <div>
                   

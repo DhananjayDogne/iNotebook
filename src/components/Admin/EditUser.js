@@ -3,7 +3,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import './EditUser.css';
 
 export const EditUser = () => {
-    const { state } = useLocation();  // get the user details passed from Users component
+    const { state } = useLocation();
     const [user, setUser] = useState(state.user);
     const navigate = useNavigate();
 
@@ -12,6 +12,7 @@ export const EditUser = () => {
         setUser({ ...user, [name]: value });
     };
 
+    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
@@ -26,7 +27,7 @@ export const EditUser = () => {
 
             const result = await response.json();
             if (response.ok) {
-                navigate('/admin/userlist');
+                navigate('/admin/userlist'); 
             } else {
                 alert('Failed to update user');
             }
@@ -36,37 +37,42 @@ export const EditUser = () => {
     };
 
     return (
-        <div className="edit-user-container">
-            <h2>Edit User</h2>
-            <form onSubmit={handleSubmit}>
-                <label>
+        <div className="edit-user-page-container">
+            <h2 className="edit-user-page-header">Edit User</h2>
+            <form className="edit-user-form" onSubmit={handleSubmit}>
+                <label className="edit-user-form-label">
                     Name:
                     <input
                         type="text"
                         name="name"
                         value={user.name}
                         onChange={handleChange}
+                        className="edit-user-form-input"
                     />
                 </label>
-                <label>
+                <label className="edit-user-form-label">
                     Email:
                     <input
                         type="email"
                         name="email"
                         value={user.email}
                         onChange={handleChange}
+                        className="edit-user-form-input"
                     />
                 </label>
-                <label>
+                <label className="edit-user-form-label">
                     Role:
                     <input
                         type="text"
                         name="role"
                         value={user.role}
                         onChange={handleChange}
+                        className="edit-user-form-input"
                     />
                 </label>
-                <button type="submit">Update</button>
+                <button type="submit" className="edit-user-form-btn submit-btn">
+                    Update
+                </button>
             </form>
         </div>
     );

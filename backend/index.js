@@ -16,6 +16,7 @@ app.use(express.json()) // This is a middleware to parse JSON data from the requ
 app.use('/api/auth', require('./routes/auth'));
 app.use('/api/contacts', require('./routes/contacts'));
 app.use('/api/admin', require('./routes/admin'));
+app.use('/api/group', require('./routes/group'));
 
 
 app.listen(port, () => {

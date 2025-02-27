@@ -1,5 +1,7 @@
 /* EditUser.css */
-.edit-user-container {
+
+/* Main container for the edit user page */
+.edit-user-page-container {
     width: 80%;
     margin: 0 auto;
     padding: 20px;
@@ -9,26 +11,30 @@
     padding-top: 4rem;
 }
 
-.edit-user-container h2 {
+/* Header for the edit user page */
+.edit-user-page-header {
     text-align: center;
     font-size: 2rem;
     color: #333;
     margin-bottom: 20px;
 }
 
-form {
+/* Form layout for the edit user */
+.edit-user-form {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-label {
+/* Label styling for inputs */
+.edit-user-form label {
     font-size: 1.1rem;
     color: #555;
     margin-bottom: 5px;
 }
 
-input {
+/* Styling for the input fields */
+.edit-user-form input {
     padding: 10px;
     font-size: 1rem;
     border: 1px solid #ccc;
@@ -37,12 +43,14 @@ input {
     box-sizing: border-box;
 }
 
-input:focus {
+/* Focus effect on input fields */
+.edit-user-form input:focus {
     border-color: #4caf50;
     outline: none;
 }
 
-button {
+/* Button styling */
+.edit-user-form button.submit-btn {
     padding: 12px 20px;
     background-color: #4caf50;
     color: white;
@@ -54,21 +62,25 @@ button {
     width: 100%;
 }
 
-button:hover {
+/* Button hover effect */
+.edit-user-form button.submit-btn:hover {
     background-color: #45a049;
 }
 
-button:focus {
+/* Button focus effect */
+.edit-user-form button.submit-btn:focus {
     outline: none;
 }
 
-.form-actions {
+/* Container for form action buttons (Submit and Cancel) */
+.edit-user-form-actions {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.cancel-btn {
+/* Styling for the cancel button */
+.edit-user-form-actions .cancel-btn {
     background-color: #f44336;
     color: white;
     padding: 10px 20px;
@@ -78,10 +90,12 @@ button:focus {
     transition: background-color 0.3s;
 }
 
-.cancel-btn:hover {
+/* Cancel button hover effect */
+.edit-user-form-actions .cancel-btn:hover {
     background-color: #e53935;
 }
 
-.cancel-btn:focus {
+/* Cancel button focus effect */
+.edit-user-form-actions .cancel-btn:focus {
     outline: none;
 }
