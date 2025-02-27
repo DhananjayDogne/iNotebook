@@ -7,39 +7,43 @@ const NoteState = (props) => {
     
     const [notes, setNotes] = useState(notesInitial);
     //Add notes
-    const addNotes = async (title,description,tag) => {
+    const addNotes = async (name, email, mobile, mother, father, address) => {
         
-        const note = await fetch(`${host}/api/notes/addnote`, {
+        const note = await fetch(`${host}/api/contacts/addcontact`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "auth-token": localStorage.getItem('token')
             },
-            body: JSON.stringify({title, description, tag}),
+            body: JSON.stringify({ name, email, mobile, mother, father, address }),
         });
-       
+        
         setNotes(notes.concat(note));
      }
 
     //edit
-    const editNote = async (id, title, description, tag) => {
+    const editNote = async (id, name, email, mobile, mother, father, address) => {
         
         //Backend Api call
-        const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
+        const response = await fetch(`${host}/api/contacts/updatecontact/${id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
                 "auth-token":localStorage.getItem('token')
             },
-            body: JSON.stringify({ title, description, tag }), 
+            body: JSON.stringify({ name, email, mobile, mother, father, address }), 
         });
         
-        const newnotes=JSON.parse(JSON.stringify(notes))
+        const newnotes = JSON.parse(JSON.stringify(notes));
+
         for (let i = 0; i < newnotes.length; i++) { 
             if (newnotes[i]._id === id) { 
-                newnotes[i].title = title;
-                newnotes[i].description = description;
-                newnotes[i].tag = tag;
+                newnotes[i].name = name;
+                newnotes[i].email = email;
+                newnotes[i].mobile = mobile;
+                newnotes[i].mother = mother;
+                newnotes[i].father = father;
+                newnotes[i].address = address;
                 break;
             }
         }
@@ -49,7 +53,7 @@ const NoteState = (props) => {
 
     //Delete notes
     const deleteNote = async (id) => {
-        const response = await fetch(`${host}/api/notes/delete/${id}`, {
+        const response = await fetch(`${host}/api/contacts/delete/${id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -61,10 +65,10 @@ const NoteState = (props) => {
         const newNotes = notes.filter((note) => {return note._id !== id });
         setNotes(newNotes);
     }
-    //Fetch All Notes
+    //Fetch All Contact
     const fetchNotes = async() => { 
         
-        const response = await fetch(`${host}/api/notes/fetchallnotes`, {
+        const response = await fetch(`${host}/api/contacts/fetchallcontact`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -72,10 +76,13 @@ const NoteState = (props) => {
             },
             body: JSON.stringify(),
         });
-        const json=await response.json();
+        const json = await response.json();
+        console.log(json);
         
         setNotes(json);
     }
+
+   
 
    
     return (

@@ -21,6 +21,7 @@ export const Signuppage = () => {
         if (json.success) {
             //Save And Redirect To Home
             localStorage.setItem("token", json.token)
+            localStorage.setItem("role", json.role)
             navigate('/');
         } else {
             if (json.error) alert(json.error);

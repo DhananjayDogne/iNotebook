@@ -14,7 +14,7 @@ export const Navbar = () => {
     }
     return (
         <div className='navbar'>
-            <div className='logo'>iNoteBook</div>
+            <div className='logo'>CM</div>
             <div className='links'>
                 <Link className={`link ${location.pathname==='/'? "active": ""}`}   to='/'>Home</Link>
                 <Link className={`link ${location.pathname==='/about'?  "active": ""}`}  to='/about'>About</Link>

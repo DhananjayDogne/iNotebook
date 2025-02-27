@@ -1,0 +1,9 @@
+
+.contact_container {
+    padding-top: 6rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 100%;
+    text-align: center;
+}
