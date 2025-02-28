@@ -1,0 +1,162 @@
+.contact-page-container {
+    padding-top: 4rem;
+    font-family: Arial, sans-serif;
+    max-width: 1000px;
+    margin: 0 auto;
+}
+.add-grpcontact-btn{
+    padding: 10px 20px;
+    background-color: #04c30a;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-bottom: 1rem;
+}
+.contact-page-container h2 {
+    font-size: 2rem;
+    margin-bottom: 1rem;
+    color: #333;
+}
+
+.contact-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
+.contact-card {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 1rem;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.contact-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+}
+
+.contact-card h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: #2196F3;
+}
+
+.contact-card p {
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+}
+
+.contact-card strong {
+    font-weight: bold;
+}
+
+.icon-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 1rem;
+}
+
+.contact-card i {
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #555;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.trash {
+    color: #f44336;
+}
+
+.edit {
+    color: #2196F3;
+}
+
+.trash:hover {
+    color: #d32f2f;
+}
+
+.edit:hover {
+    color: #1976D2;
+}
+
+.popup {
+    color: black;
+    width: 35%;
+    background: #d9d6d6;
+    padding: 1rem;
+    border-radius: 12px;
+    position: fixed;
+    left: 32%;
+    top: -40%;
+    visibility: hidden;
+    transition: top .7s;
+    z-index: 5;
+}
+
+.popup.poped {
+    top: 10%;
+    visibility: visible;
+}
+
+.popup form {
+    padding: 1px;
+    margin: 1px;
+}
+
+.popup_row1 {
+    text-align: start;
+    display: grid;
+}
+
+.popup_row1 label {
+    margin-top: 1rem;
+    font-size: large;
+}
+
+.popup_row1 input,
+.popup_row1 textarea {
+    outline: none;
+    width: 90%;
+    font-size: large;
+    padding: 1px;
+    border: 1px solid #888686;
+    border-radius: 5px;
+}
+
+.popup form button {
+    width: 20%;
+    margin-top: 2rem;
+    border-radius: 20px;
+    background-color: rgb(20, 107, 247);
+    color: white;
+    padding: 0.3rem 0;
+}
+
+.back-btn {
+    background-color: #2196F3;
+    color: white;
+    padding: 0.8rem 2rem;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 2rem;
+}
+
+.back-btn:hover {
+    background-color: #1976D2;
+}
+
+
+.nocontactfound{
+    color: #333;
+    text-align: center;
+    margin-top: 2rem;
+}

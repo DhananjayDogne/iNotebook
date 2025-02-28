@@ -27,27 +27,28 @@ router.post('/createUser', [
         if (user) {
             return res.status(400).json({ success: success, error: "Sorry this user is already exist" });
         }
-        //create a user
+        
         //create a salt to hash password
-        var salt = await bcrypt.genSaltSync(10);
+        let salt = await bcrypt.genSaltSync(10);
         const secPass = await bcrypt.hashSync(req.body.password, salt);
         user = await User.create({
             name: req.body.name,
             email: req.body.email,
             password: secPass,
-
+            role:'user'
         });
 
         //Creating a token for authentication
         const data = {
             user: {
-                id: user.id
+                id: user.id,
+                role:user.role
             }
         }
        
         const authtoken = jwt.sign(data, JWT_SECRET);
         success = true;
-        res.send({ success: success, token: authtoken});
+        res.send({ success: success, token: authtoken ,role:user.role});
     }
     catch (error) {
         console.log(error.message);
@@ -81,12 +82,13 @@ router.post('/login', [
         }
         const data = {
             user: {
-                id:user.id
+                id: user.id,
+                role:user.role
             }
         }
         const authtoken = jwt.sign(data, JWT_SECRET);
         success = true;
-        res.send({ success: success , token:authtoken });
+        res.send({ success: success , token:authtoken ,role:user.role});
     }
     catch (error) { 
         console.log(error.message);
@@ -97,7 +99,7 @@ router.post('/login', [
 
 
 //Router3 Get loggedin User Details using: POST "/api/auth/getuser". Login required
-router.post('/getuser',fetchuser, async (req, res) => {
+router.get('/getuser',fetchuser, async (req, res) => {
     try {
         const userId = req.user.id;
         const user = await User.findById(userId).select("-password");

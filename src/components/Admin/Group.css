@@ -1,0 +1,142 @@
+
+.groups-page-container {
+    padding: 4rem;
+    font-family: Arial, sans-serif;
+}
+
+.groups-page-header {
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+
+.create-group-btn {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+.create-group-btn:hover {
+    background-color: #0056b3;
+}
+
+.groups-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+.groups-table th,
+.groups-table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+.groups-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+}
+
+.groups-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.groups-table tr:hover {
+    background-color: #f1f1f1;
+}
+.view-contact-btn{
+        padding: 5px 10px;
+        background-color: #289fa7;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        margin: 1rem;
+}
+
+.add-user-btn{
+    padding: 5px 10px;
+    background-color: #01b801;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 1rem;
+}
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-container {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    width: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+.modal-header {
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.modal-input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.modal-action-btn {
+    padding: 10px 20px;
+    background-color: #28a745;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 1rem;
+}
+
+.modal-action-btn:hover {
+    background-color: #218838;
+}
+
+.modal-cancel-btn {
+    background-color: #dc3545;
+    padding: 10px 20px;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 1rem;
+}
+
+.modal-cancel-btn:hover {
+    background-color: #c82333;
+}
+
+.modal-input:focus {
+    outline: none;
+    border-color: #007BFF;
+}

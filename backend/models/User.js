@@ -14,6 +14,14 @@ const UserSchema = new Schema({
         type: String,
         required: true
     },
+    role: {
+        type: String,
+        default: 'user'
+    },
+    group: [{
+        type: Schema.Types.ObjectId,
+        ref: 'group'
+    }],
     date: {
         type: Date,
         default: Date.now

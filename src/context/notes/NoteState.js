@@ -1,87 +1,121 @@
-import {useState} from 'react';
+import { useState } from 'react';
 import NoteContext from './NoteContext';
+import { ToastContainer, toast } from 'react-toastify';
 
-const NoteState = (props) => { 
+const NoteState = (props) => {
     const host = "http://localhost:5000";
-    const notesInitial =[ ]
-    
+    const notesInitial = [];
+
     const [notes, setNotes] = useState(notesInitial);
-    //Add notes
-    const addNotes = async (title,description,tag) => {
-        
-        const note = await fetch(`${host}/api/notes/addnote`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "auth-token": localStorage.getItem('token')
-            },
-            body: JSON.stringify({title, description, tag}),
-        });
-       
-        setNotes(notes.concat(note));
-     }
 
-    //edit
-    const editNote = async (id, title, description, tag) => {
-        
-        //Backend Api call
-        const response = await fetch(`${host}/api/notes/updatenote/${id}`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "auth-token":localStorage.getItem('token')
-            },
-            body: JSON.stringify({ title, description, tag }), 
-        });
-        
-        const newnotes=JSON.parse(JSON.stringify(notes))
-        for (let i = 0; i < newnotes.length; i++) { 
-            if (newnotes[i]._id === id) { 
-                newnotes[i].title = title;
-                newnotes[i].description = description;
-                newnotes[i].tag = tag;
-                break;
+    // Add note
+    const addNotes = async (name, email, mobile, mother, father, address) => {
+        try {
+            const note = await fetch(`${host}/api/contacts/addcontact`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "auth-token": localStorage.getItem('token')
+                },
+                body: JSON.stringify({ name, email, mobile, mother, father, address }),
+            });
+
+            const result = await note.json();
+
+            if (note.ok) {
+                setNotes(notes.concat(result));
+                toast.success('Contact added successfully!');
+            } else {
+                toast.error(`Error: ${result.message || 'Failed to add contact'}`);
             }
+        } catch (error) {
+            toast.error(`Error: ${error.message}`);
         }
-        setNotes(newnotes)
-        const json = await response.json();
-    }
+    };
 
-    //Delete notes
+    // Edit note
+    const editNote = async (id, name, email, mobile, mother, father, address) => {
+        try {
+            const response = await fetch(`${host}/api/contacts/updatecontact/${id}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "auth-token": localStorage.getItem('token')
+                },
+                body: JSON.stringify({ name, email, mobile, mother, father, address }),
+            });
+
+            const json = await response.json();
+
+            if (response.ok) {
+                const updatedNotes = notes.map((note) =>
+                    note._id === id ? { ...note, name, email, mobile, mother, father, address } : note
+                );
+                setNotes(updatedNotes);
+                toast.success('Contact updated successfully!');
+            } else {
+                toast.error(`Error: ${json.message || 'Failed to update contact'}`);
+            }
+        } catch (error) {
+            toast.error(`Error: ${error.message}`);
+        }
+    };
+
+    // Delete note
     const deleteNote = async (id) => {
-        const response = await fetch(`${host}/api/notes/delete/${id}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                "auth-token": localStorage.getItem('token')
-            },
-        });
-        
-        
-        const newNotes = notes.filter((note) => {return note._id !== id });
-        setNotes(newNotes);
-    }
-    //Fetch All Notes
-    const fetchNotes = async() => { 
-        
-        const response = await fetch(`${host}/api/notes/fetchallnotes`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "auth-token": localStorage.getItem('token')
-            },
-            body: JSON.stringify(),
-        });
-        const json=await response.json();
-        
-        setNotes(json);
-    }
+        try {
+            const response = await fetch(`${host}/api/contacts/delete/${id}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "auth-token": localStorage.getItem('token')
+                },
+            });
 
-   
+            const json = await response.json();
+
+            if (response.ok) {
+                setNotes(notes.filter((note) => note._id !== id));
+                toast.success('Contact deleted successfully!');
+            } else {
+                toast.error(`Error: ${json.message || 'Failed to delete contact'}`);
+            }
+        } catch (error) {
+            toast.error(`Error: ${error.message}`);
+        }
+    };
+
+    // Fetch all notes
+    const fetchNotes = async () => {
+        try {
+            const response = await fetch(`${host}/api/contacts/fetchallcontact`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "auth-token": localStorage.getItem('token')
+                },
+            });
+
+            const json = await response.json();
+
+            if (response.ok) {
+                setNotes(json);
+                toast.success('Contacts fetched successfully!');
+            } else {
+                toast.error(`Error: ${json.message || 'Failed to fetch contacts'}`);
+            }
+        } catch (error) {
+            toast.error(`Error: ${error.message}`);
+        }
+    };
+
     return (
         <NoteContext.Provider value={{ notes, addNotes, deleteNote, editNote, fetchNotes }}>
             {props.children}
+            {/* Toast Container for displaying toasts */}
+            <ToastContainer />
         </NoteContext.Provider>
-    )
-}
+    );
+};
+
 export default NoteState;

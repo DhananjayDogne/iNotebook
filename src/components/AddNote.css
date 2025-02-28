@@ -1,11 +1,14 @@
+.adduser{
+    padding-top: 4rem;
+}
 .form_container{
     border: 1px solid #b6b6b6;
     border-radius: 5px;
     width: 40%;
     align-items: center;
     margin-top: 2rem;
-    margin:1rem auto ;
-
+    margin: auto ;
+    /* height: 80vh; */
     padding: 1rem;
     box-shadow:0 0 10px rgba(0,0,0,0.4) inset ;
 }

@@ -1,36 +1,67 @@
-import react, { useState, useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import "./AddNote.css";
 
 import NoteContext from "../context/notes/NoteContext";
+
 export const AddNote = () => {
-    const { notes, addNotes,fetchNotes } = useContext(NoteContext);
-    const [note, setNote] = useState({title: "",description:"",tag:""});
+    const { addNotes, fetchNotes } = useContext(NoteContext);
+    const [note, setNote] = useState({
+        name: "",
+        email: "",
+        mobile: "",
+        mother: "",
+        father: "",
+        address: ""
+    });
+
     const handleClick = () => {
-        addNotes(note.title, note.description, note.tag);
-        setNote({title: "",description:"",tag:""});
-        fetchNotes();
+        addNotes(note.name, note.email, note.mobile, note.mother, note.father, note.address);
+        setNote({ name: "", email: "", mobile: "", mother: "", father: "", address: "" }); 
+        fetchNotes(); 
     }
+
     const onChange = (e) => {
-        e.preventDefault();
-        setNote({ ...note, [e.target.name]: e.target.value })
+        e.preventDefault(); 
+        setNote({ ...note, [e.target.name]: e.target.value }); 
     }
 
     return (
-        <div className='form_container'>
-            <form className='form_body'>
-                <div className='row'>
-                    <label>Title</label>
-                    <input type="text" name="title" minLength={5} required value={note.title} placeholder='Enter title' onChange={onChange} />
-                </div>
-                <div className='row'>
-                    <label>Description</label>
-                    <textarea type="textarea" name="description" minLength={5} required value={note.description }placeholder='Enter description'  rows={4} onChange={onChange} /></div>
-                <div className='row'>
-                    <label>Tag</label>
-                    <input type="text" name="tag"  value={note.tag} placeholder='Enter tag' onChange={onChange} />
-                </div>
-            </form>
-            <button onClick={handleClick}>Add Note</button>
+        <div className='adduser'>
+            <h1>Add a User</h1>
+            <div className='form_container'>
+                <form className='form_body'>
+                    <div className='row'>
+                        <label>Name</label>
+                        <input type="text" name="name" required value={note.name} placeholder='Enter name' onChange={onChange} />
+                    </div>
+
+                    <div className='row'>
+                        <label>Email</label>
+                        <input type="email" name="email" required value={note.email} placeholder='Enter email' onChange={onChange} />
+                    </div>
+
+                    <div className='row'>
+                        <label>Mobile</label>
+                        <input type="text" name="mobile" required value={note.mobile} placeholder='Enter mobile number' onChange={onChange} />
+                    </div>
+
+                    <div className='row'>
+                        <label>Mother's Name</label>
+                        <input type="text" name="mother" value={note.mother} placeholder='Enter mother name' onChange={onChange} />
+                    </div>
+
+                    <div className='row'>
+                        <label>Father's Name</label>
+                        <input type="text" name="father" value={note.father} placeholder='Enter father name' onChange={onChange} />
+                    </div>
+
+                    <div className='row'>
+                        <label>Address</label>
+                        <textarea name="address" value={note.address} placeholder='Enter address' rows={4} onChange={onChange} />
+                    </div>
+                </form>
+                <button onClick={handleClick}>Add User</button>
+            </div>
         </div>
     );
 }

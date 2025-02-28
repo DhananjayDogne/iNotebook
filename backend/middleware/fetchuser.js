@@ -11,6 +11,7 @@ const fetchuser = (req, res, next) => {
     }
     try {
         const string = jwt.verify(token, JWT_SECRET);
+        // console.log(string.user.role);
         req.user = string.user;
         next();
     }
