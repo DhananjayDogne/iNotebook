@@ -29,11 +29,12 @@ export const EditUser = () => {
             const result = await response.json();
             if (response.ok) {
                 navigate('/admin/userlist'); 
+                toast.success('User updated successfully');
             } else {
-                alert('Failed to update user');
+                toast.error('Failed to update user');
             }
         } catch (error) {
-            console.error("Error updating user:", error.message);
+            toast.error('Failed to update user');
         }
     };
 
