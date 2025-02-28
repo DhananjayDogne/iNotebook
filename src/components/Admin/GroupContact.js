@@ -75,7 +75,7 @@ const GroupContact = () => {
         e.preventDefault();
         if (currentContact) {
             try {
-                const response = await fetch(`${process.env.REACT_APP_HOSTURL}/api/group/contact/${currentContact._id}`, {
+                const response = await fetch(`${process.env.REACT_APP_HOSTURL}/api/group/editcontact/${currentContact._id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -89,6 +89,7 @@ const GroupContact = () => {
                         contact._id === currentContact._id ? currentContact : contact
                     ));
                     popupRemove();
+                    fetchContactDetails();
                 } else {
                     console.error('Error updating contact:', result.message);
                 }
@@ -120,6 +121,7 @@ const GroupContact = () => {
             const result = await response.json();
             if (response.ok) {
                 setContacts(contacts.filter(contact => contact._id !== contactId));
+                fetchContactDetails();
             } else {
                 console.error('Error deleting contact:', result.message);
             }
@@ -145,6 +147,7 @@ const GroupContact = () => {
             if (response.status) {
                 setContacts([result, ...contacts]); 
                 popupRemoveAddContact(); 
+                fetchContactDetails();
             } else {
                 console.error('Error creating contact:', result.message);
             }
@@ -160,7 +163,7 @@ const GroupContact = () => {
     return (
         <div className="contact-page-container">
             <h2>Contact Details</h2>
-            <button className="add-contact-btn" onClick={popupAddContact}>Add New Contact</button>
+            <button className="add-grpcontact-btn" onClick={popupAddContact}> + Add New Contact</button>
 
             <div className="contact-list">
                 {contacts.length > 0 ? (

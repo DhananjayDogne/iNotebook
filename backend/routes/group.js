@@ -63,37 +63,87 @@ router.post('/creategroup',fetchuser, async (req, res) => {
     }
 });
 
-
-// Add a user to an existing group
-router.post('/addUserToGroup', async (req, res) => {
+// edit group contact
+router.put('/editcontact/:id', async (req, res) => {
     try {
-        const { groupId, userId } = req.body;
+        const id = req.params.id;
+        const { name, email, mobile, mother, father, address } = req.body;
 
+        if (!name || !email || !mobile) {
+            return res.status(400).json({ message: 'Name, Email, and Mobile are required' });
+        }
+
+        const updatedContact = await Contact.findByIdAndUpdate(
+            id,
+            { name, email, mobile, mother, father, address },
+            { new: true } 
+        );
+
+        if (!updatedContact) {
+            return res.status(404).json({ message: 'Contact not found' });
+        }
+
+        // Successfully updated the contact
+        return res.status(200).json(updatedContact);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error updating contact', error: error.message });
+    }
+});
+
+
+router.delete('/contact/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const contact = await Contact.findByIdAndDelete(id);
+
+        if (!contact) {
+            return res.status(404).json({ message: 'Contact not found' });
+        }
+
+        return res.status(200).json({ message: 'Contact deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Error deleting contact', error: error.message });
+    }
+});
+
+// Add multiple users to an existing group
+router.put('/addusertogroup/:id', async (req, res) => {
+    try {
+        const { users } = req.body;  // Expecting an array of user IDs
+        
+        const groupId = req.params.id;
         const group = await Group.findById(groupId);
         if (!group) {
             return res.status(404).json({ message: 'Group not found' });
         }
 
-        const user = await User.findById(userId);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
+        const existingUsersInGroup = new Set(group.userlist.map(userId => userId.toString()));
+
+        for (let userId of users) {
+            if (!existingUsersInGroup.has(userId)) {
+                group.userlist.push(userId);
+
+                const user = await User.findById(userId);
+                if (!user) {
+                    return res.status(404).json({ message: `User with ID ${userId} not found` });
+                }
+
+                if (!user.group.includes(groupId)) {
+                    user.group.push(groupId);
+                    await user.save();  
+                }
+            }
         }
 
-        if (group.userlist.includes(userId)) {
-            return res.status(400).json({ message: 'User is already in this group' });
-        }
-
-        group.userlist.push(userId);
         await group.save();
 
-        user.group.push(groupId);
-        await user.save();
-
-        res.status(200).json({ message: 'User added to group successfully' });
+        res.status(200).json({ message: 'Users added to group successfully' });
 
     } catch (error) {
-        console.error('Error adding user to group:', error);
-        res.status(500).json({ message: 'Error adding user to group', error });
+        console.error('Error adding users to group:', error);
+        res.status(500).json({ message: 'Error adding users to group', error });
     }
 });
 
