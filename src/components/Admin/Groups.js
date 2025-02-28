@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from "react-toastify";
 import './Group.css';
 
 export const Groups = () => {
@@ -25,8 +26,9 @@ export const Groups = () => {
                 });
                 const json = await response.json();
                 setGroups(json);
+                toast.success("Groups fetched successfully");
             } catch (error) {
-                console.error('Error fetching groups:', error.message);
+                toast.error(`Error fetching groups:${ error.message}`);
             }
         };
 
@@ -41,8 +43,9 @@ export const Groups = () => {
                 });
                 const json = await response.json();
                 setUsers(json);
+                toast.success("Users fetched successfully");
             } catch (error) {
-                console.error('Error fetching users:', error.message);
+                toast.error(   `Error fetching users:  ${error.message}`);
             }
         };
 
@@ -104,8 +107,8 @@ export const Groups = () => {
             alert("Please select at least one user");
             return;
         }
-        console.log(selectedUsers);
-        
+        // console.log(selectedUsers);
+
         try {
             const response = await fetch(`${process.env.REACT_APP_HOSTURL}/api/group/addusertogroup/${currentGroupId}`, {
                 method: 'PUT',
@@ -123,9 +126,10 @@ export const Groups = () => {
                     group._id === currentGroupId ? { ...group, users: json.users } : group
                 ));
                 closeUserModal();  // Close the user modal after successful addition
+                toast.success('Users added to group successfully!');
             }
         } catch (error) {
-            console.error('Error adding users:', error.message);
+            toast.error(`Error adding users: ${error.message}`);
         }
     };
 
@@ -155,7 +159,7 @@ export const Groups = () => {
                                     <button className='view-contact-btn' onClick={() => navigate(`/group/contact/${group._id}`)}>View Contacts</button>
                                 </td>
                                 <td>
-                                    <button className='add-user-btn' onClick={() => openUserModal(group._id)}>Add User</button> {/* Add user button */}
+                                    <button className='add-user-btn' onClick={() => openUserModal(group._id)}> + Add User</button> {/* Add user button */}
                                 </td>
                             </tr>
                         ))}

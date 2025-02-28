@@ -1,5 +1,6 @@
 import react, { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import './Login.css';
 
 export const Signuppage = () => {
@@ -22,11 +23,13 @@ export const Signuppage = () => {
             //Save And Redirect To Home
             localStorage.setItem("token", json.token)
             localStorage.setItem("role", json.role)
+            toast.success('Signup successfully!');
             navigate('/');
         } else {
-            if (json.error) alert(json.error);
+            if (json.error) toast.error(`Error: ${json.message || 'Failed to Login'}`);
             else {
                 alert("Some error occurred .PLease try again !");
+                toast.error(`Some error occurred .PLease try again !`);
             }
         }
     }
@@ -39,7 +42,9 @@ export const Signuppage = () => {
     
     const handleSubmit = (e) => {
         e.preventDefault();
-        Signup(user.name, user.email, user.password);
+        if (user.name.length < 4 || user.email.length < 4 || user.password.length < 4) {
+            toast.error("Detail should be atleast 4 characters long");
+        }else Signup(user.name, user.email, user.password);
     }
     return (
         <div className='outer_box'>
@@ -57,7 +62,7 @@ export const Signuppage = () => {
                     <h4>Password</h4>
                     <input type='password' name='password' onChange={handleChange} required />
                 </div>
-                <button disabled={user.name.length<4 || user.password.length<5}>Submit</button>
+                <button >Submit</button>
             </form>
         </div>
 

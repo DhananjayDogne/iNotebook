@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import './GroupContact.css';
+
 
 const GroupContact = () => {
     const { id } = useParams();
@@ -27,14 +29,15 @@ const GroupContact = () => {
                 },
             });
             const result = await response.json();
-            console.log(result);
+            // console.log(result);
             if (response.status) {
                 setContacts(result);
+                // toast.success('Successfully fetched contact details');
             } else {
-                console.error('Error fetching contacts:', result.message);
+                toast.error('Failed to fetch contact details');
             }
         } catch (error) {
-            console.error('Error fetching contact details:', error.message);
+            toast.error('Failed to fetch contact details');
         }
     };
 
@@ -90,11 +93,12 @@ const GroupContact = () => {
                     ));
                     popupRemove();
                     fetchContactDetails();
+                    toast.success('Contact updated successfully!');
                 } else {
-                    console.error('Error updating contact:', result.message);
+                    toast.error('Failed to update contact');
                 }
             } catch (error) {
-                console.error('Error updating contact:', error.message);
+                toast.error('Error updating contact');
             }
         }
     };
@@ -122,11 +126,12 @@ const GroupContact = () => {
             if (response.ok) {
                 setContacts(contacts.filter(contact => contact._id !== contactId));
                 fetchContactDetails();
+                toast.success('Contact deleted successfully!');
             } else {
-                console.error('Error deleting contact:', result.message);
+                toast.error('Error deleting contact:');
             }
         } catch (error) {
-            console.error('Error deleting contact:', error.message);
+            toast.error('Error deleting contact:');
         }
     };
 
@@ -148,11 +153,12 @@ const GroupContact = () => {
                 setContacts([result, ...contacts]); 
                 popupRemoveAddContact(); 
                 fetchContactDetails();
+                toast.success('Contact created successfully!');
             } else {
-                console.error('Error creating contact:', result.message);
+                toast.error('Error creating contact:');
             }
         } catch (error) {
-            console.error('Error creating contact:', error.message);
+            console.error('Error creating contact:');
         }
     };
 

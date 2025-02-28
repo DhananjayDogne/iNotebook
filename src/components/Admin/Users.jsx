@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import './Users.css';
 import { useNavigate } from "react-router-dom";
-import { EditUser } from "./EditUser";
+import { toast } from "react-toastify";
 
 export const Users = () => {
     const [userlist, setUserlist] = useState([]);
@@ -19,8 +19,9 @@ export const Users = () => {
 
             const json = await response.json();
             setUserlist(json);
+            toast.success("Userlist fetched successfully");
         } catch (error) {
-            console.error("Error fetching users:", error.message);
+            toast.error(`Error fetching users:${error.message}`);
         }
     };
 
@@ -78,8 +79,9 @@ export const Users = () => {
                                 <td>{user.email}</td>
                                 <td>{user.role}</td>
                                 <td>{new Date(user.date).toLocaleDateString()}</td>
-                                <td><button onClick={() => getUserDetails(user._id)}>View</button></td>
-                                <td><button onClick={() => editUser(user)}>Edit</button></td>
+                                <td><button className='view-contact-btn' onClick={() => getUserDetails(user._id)}>View</button></td>
+                                <td><i className="fa-regular fa-pen-to-square edit" onClick={() => editUser(user)}></i></td>
+                                
                                 <td><i className="fa-solid fa-trash-can trash" onClick={() => deleteUser(user._id)}></i></td>
                             </tr>
                         ))}

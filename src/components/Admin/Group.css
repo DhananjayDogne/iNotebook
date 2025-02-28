@@ -59,6 +59,17 @@
         font-size: 16px;
         margin: 1rem;
 }
+
+.add-user-btn{
+    padding: 5px 10px;
+    background-color: #01b801;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    margin: 1rem;
+}
 .modal-overlay {
     position: fixed;
     top: 0;

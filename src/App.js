@@ -17,13 +17,16 @@ import { Contacts } from "./components/Admin/Contacts";
 import { EditUser } from "./components/Admin/EditUser";
 import { AdminHome } from "./components/Admin/AdminHome";
 import { Groups } from "./components/Admin/Groups";
-import GroupContact  from "./components/Admin/GroupContact";
+import GroupContact from "./components/Admin/GroupContact";
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css'; 
 
 function App() {
   return (
     <>
       <NoteState>
         <Router>
+            <ToastContainer position="top-right" autoClose={5000} />
           <Navbar />
           <Routes>
             <Route path="/" element={<Home />}></Route>

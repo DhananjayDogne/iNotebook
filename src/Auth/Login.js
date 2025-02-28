@@ -1,5 +1,6 @@
 import react, { useState } from 'react';
 import { useNavigate } from "react-router-dom";
+import { toast } from 'react-toastify';
 import './Login.css';
 const Login = () => {
     const [user, Setuser] = useState({ email: "dd4321@gmail.com", password: "dd4321" });
@@ -19,11 +20,13 @@ const Login = () => {
             //Save And Redirect To Home
             localStorage.setItem("token", json.token)
             localStorage.setItem("role", json.role)
+            toast.success('Login successfully!');
             navigate('/');
         } else {
-            if (json.error) alert(json.error);
+            if (json.error) toast.error(`Error: ${json.message || 'Failed to Login'}`);
             else {
                 alert("Some error occurred .PLease try again !");
+                toast.error(`Some error occurred .PLease try again !`);
             }
         }
     }
@@ -34,6 +37,9 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        if (user.name.length < 4 || user.email.length < 4 || user.password.length < 4) {
+            toast.error("Detail should be atleast 4 characters long");
+        }
         LoginUser();
     }
     return (
