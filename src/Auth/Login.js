@@ -37,7 +37,7 @@ const Login = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        if (user.name.length < 4 || user.email.length < 4 || user.password.length < 4) {
+        if ( user.email.length < 4 || user.password.length < 4) {
             toast.error("Detail should be atleast 4 characters long");
         }
         LoginUser();
