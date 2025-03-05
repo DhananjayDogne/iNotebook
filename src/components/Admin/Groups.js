@@ -42,15 +42,43 @@ export const Groups = () => {
                     },
                 });
                 const json = await response.json();
-                setUsers(json);
-                toast.success("Users fetched successfully");
+                if (json.error) {
+                    toast.error(`Error fetching users: ${json.message}`);
+                } else {
+                    setUsers(json);
+                    toast.success("Users fetched successfully");
+                }
             } catch (error) {
                 toast.error(   `Error fetching users:  ${error.message}`);
             }
         };
 
-        fetchGroups();
-        fetchUsers();
+        const fetchPersonalGroups = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_HOSTURL}/api/group/fetchpersonalgroups`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'auth-token': localStorage.getItem('token'),
+                    },
+                });
+                const json = await response.json();
+                console.log(json);
+                setGroups(json);
+                toast.success("Groups fetched successfully");
+            } catch (e) {
+                console.error('Error fetching personal groups:', e.message);
+            }
+        };
+
+
+        if (localStorage.getItem('role') == 'admin') {
+            fetchGroups();
+            fetchUsers();
+        }
+        else {
+            fetchPersonalGroups();
+        }
     }, []);
 
     const openModal = () => setIsModalOpen(true);
@@ -84,7 +112,7 @@ export const Groups = () => {
             });
 
             const json = await response.json();
-
+            // console.log(json);
             if (json) {
                 setGroups((prevGroups) => [...prevGroups, json]);
                 closeModal();

@@ -82,7 +82,6 @@ router.delete('/delete/:id', fetchuser, async (req, res) => {
         let contact = await Contact.findById(req.params.id);
         if (!contact) { return res.status(404).send("Not Found"); }
 
-        //checking for user is owner
         if (req.user.role === 'admin' || contact.user.toString() === req.user.id) {
 
             contact = await Contact.findByIdAndDelete(req.params.id);

@@ -10,6 +10,7 @@ const GroupContact = () => {
     const [popup, setPopup] = useState("popup");
     const [newContactPopup, setNewContactPopup] = useState("popup");
     const [currentContact, setCurrentContact] = useState(null);
+    const [usersingroup, setUsersInGroup] = useState([]);
     const [newContact, setNewContact] = useState({
         name: '',
         email: '',
@@ -162,34 +163,82 @@ const GroupContact = () => {
         }
     };
 
+    const getalluserofgroup = async () => {
+        try {
+            const response = await fetch(`${process.env.REACT_APP_HOSTURL}/api/group/getalluserofgroup/${id}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'auth-token': localStorage.getItem('token'),
+                }
+            });
+            const result = await response.json();
+            console.log(result);
+            if (response) {
+                setUsersInGroup(result);
+                // toast.success('Contact created successfully!');
+            } else {
+                toast.error('Error geting User of Group');
+            }
+        } catch (error) {
+            toast.error('Error geting User of Group');
+        }
+    };
+
+
+
     useEffect(() => {
         fetchContactDetails();
+        getalluserofgroup();
     }, []);
 
     return (
+        <div className='groupcontact'>
+             <div className='usersingroup'>
+                <h3>Users in this group:</h3>
+                <l className='usersingroup_list'>
+                    {usersingroup.length > 0 ? (
+                        usersingroup.map(user => (
+                            <ul key={user._id} className='useringroup_name'>
+                                <p>{user.name}</p>
+
+                            </ul>
+                        ))
+                    ) : (
+                        <p>No users found in this group.</p>
+                    )}
+
+                </l>
+            </div>
+       
         <div className="contact-page-container">
+           
             <h2>Contact Details</h2>
             <button className="add-grpcontact-btn" onClick={popupAddContact}> + Add New Contact</button>
-
-            <div className="contact-list">
-                {contacts.length > 0 ? (
-                    contacts.map(contact => (
-                        <div  className="contact-card" key={contact._id}>
-                            <h3>{contact.name}</h3>
-                            <p><strong>Email:</strong> {contact.email}</p>
-                            <p><strong>Mobile:</strong> {contact.mobile}</p>
-                            <p><strong>Mother:</strong> {contact.mother}</p>
-                            <p><strong>Father:</strong> {contact.father}</p>
-                            <p><strong>Address:</strong> {contact.address}</p>
-                            <div className="icon-container">
-                                <i className="fa-solid fa-trash-can trash" onClick={() => handleDelete(contact._id)}></i>
-                                <i className="fa-regular fa-pen-to-square edit" onClick={() => popupEdit(contact)}></i>
-                            </div>
-                        </div>
-                    ))
-                ) : (
-                    <p className='nocontactfound'>No contacts found in this group.</p>
-                )}
+            <div className='group'>
+                
+                    <div className="contact-list">
+                        {contacts.length > 0 ? (
+                            contacts.map(contact => (
+                                <div  className="contact-card" key={contact._id}>
+                                    <h3>{contact.name}</h3>
+                                    <p><strong>Email:</strong> {contact.email}</p>
+                                    <p><strong>Mobile:</strong> {contact.mobile}</p>
+                                    <p><strong>Mother:</strong> {contact.mother}</p>
+                                    <p><strong>Father:</strong> {contact.father}</p>
+                                    <p><strong>Address:</strong> {contact.address}</p>
+                                    <div className="icon-container">
+                                        <i className="fa-solid fa-trash-can trash" onClick={() => handleDelete(contact._id)}></i>
+                                        <i className="fa-regular fa-pen-to-square edit" onClick={() => popupEdit(contact)}></i>
+                                    </div>
+                                </div>
+                            ))
+                        ) : (
+                            <p className='nocontactfound'>No contacts found in this group.</p>
+                        )}
+                    </div>
+                    <button onClick={() => navigate('/group')} className="back-btn">Back to Group</button>
+                </div>
             </div>
 
             {/* Edit Popup */}
@@ -346,7 +395,7 @@ const GroupContact = () => {
                 </form>
             </div>
 
-            <button onClick={() => navigate('/group')} className="back-btn">Back to Group</button>
+            
         </div>
     );
 };
