@@ -20,7 +20,8 @@ const UserSchema = new Schema({
     },
     group: [{
         type: Schema.Types.ObjectId,
-        ref: 'group'
+        ref: 'group',
+        // permissions: [0,1,2,3]
     }],
     date: {
         type: Date,

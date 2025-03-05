@@ -5,7 +5,7 @@ const Contact = require('../models/Contact');
 const fetchuser = require('../middleware/fetchuser');
 const router = express.Router();
 
-
+// contacts of a group according to the group id
 router.get('/contact/:id', async (req, res) => {
     try {
         const id  = req.params.id;
@@ -31,7 +31,7 @@ router.post('/creategroup',fetchuser, async (req, res) => {
         const createdBy = req.user.id;
         // Check if all users exist
 
-        const user = await User.find({ _id: { $in: createdBy } });
+        const user = await User.findById(req.user.id);
 
         if (!user) {
             return res.status(400).json({ message: 'User not found' });
@@ -163,7 +163,6 @@ router.post('/createcontact', fetchuser, async (req, res) => {
             return res.status(404).json({ message: 'Group not found' });
         }
 
-
         const user = await User.findById(req.user.id);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
@@ -192,6 +191,7 @@ router.post('/createcontact', fetchuser, async (req, res) => {
     }
 });
 
+// Get all groups
 router.get('/fetchallgroups', async (req, res) => {
     try {
         const group = await Group.find({});
@@ -202,6 +202,61 @@ router.get('/fetchallgroups', async (req, res) => {
         res.status(200).json(group);
     } catch (error) {
         res.status(400).json({ message: 'Error fetching group', error });
+    }
+});
+
+// Get all groups of a user
+router.get('/fetchpersonalgroups',fetchuser, async (req, res) => {
+    try {
+
+        const user = await User.findById(req.user.id);
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+        const groups=user.group;
+        if (!groups || groups.length === 0) {
+            return res.status(201).json([]);
+        }
+        const groupdetail = [];
+        for (const group of groups) { 
+            groupdetail.push(await Group.findById(group));
+        }
+
+        res.status(200).json(groupdetail);
+    } catch (error) {
+        res.status(400).json({ message: 'Error fetching group', error });
+    }
+});
+
+// Get all users in a group
+router.get('/getalluserofgroup/:id', async (req, res) => {
+    try {
+        const id = req.params.id;
+        const groupdetail = await Group.findById(id);
+        if (!groupdetail) {
+            return res.status(404).json({ message: 'Group not found' });
+        }
+        const group=groupdetail.userlist;
+        // console.log(group);
+
+        if (!group) {
+            return res.status(404).json({ message: 'Group not found' });
+        }
+        const user = await User.find({}, { password: 0, group: 0 });
+        const userlist = [];
+        for (const grp of group) { 
+            for (const usr of user) { 
+                if (usr._id.toString() === grp.toString()) {
+                    userlist.push(usr);
+                    break;
+                }
+            }
+        }
+        // console.log("All uer of a group :",userlist);
+        res.status(200).json(userlist);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Error fetching group', error: error.message });
     }
 });
 
