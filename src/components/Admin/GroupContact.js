@@ -79,7 +79,7 @@ const GroupContact = () => {
         e.preventDefault();
         if (currentContact) {
             try {
-                const response = await fetch(`${process.env.REACT_APP_HOSTURL}/api/group/editcontact/${currentContact._id}`, {
+                const response = await fetch(`${process.env.REACT_APP_HOSTURL}/api/group/editcontact/${currentContact._id}/${id}`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -88,13 +88,18 @@ const GroupContact = () => {
                     body: JSON.stringify(currentContact),
                 });
                 const result = await response.json();
-                if (response.ok) {
-                    setContacts(contacts.map(contact =>
-                        contact._id === currentContact._id ? currentContact : contact
-                    ));
-                    popupRemove();
-                    fetchContactDetails();
-                    toast.success('Contact updated successfully!');
+                if (response.status == 200 || response.status == 403) {
+                    if (response.status == 403) {
+                        toast.error('You do not have permission to edit contact');
+                        popupRemove();
+                    } else {
+                        setContacts(contacts.map(contact =>
+                            contact._id === currentContact._id ? currentContact : contact
+                        ));
+                        popupRemove();
+                        fetchContactDetails();
+                        toast.success('Contact updated successfully!');
+                    }
                 } else {
                     toast.error('Failed to update contact');
                 }
@@ -116,7 +121,7 @@ const GroupContact = () => {
     // Handle delete action
     const handleDelete = async (contactId) => {
         try {
-            const response = await fetch(`${process.env.REACT_APP_HOSTURL}/api/group/contact/${contactId}`, {
+            const response = await fetch(`${process.env.REACT_APP_HOSTURL}/api/group/contact/${contactId}/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
@@ -124,10 +129,14 @@ const GroupContact = () => {
                 },
             });
             const result = await response.json();
-            if (response.ok) {
-                setContacts(contacts.filter(contact => contact._id !== contactId));
-                fetchContactDetails();
-                toast.success('Contact deleted successfully!');
+            if (response.status == 200 || response.status == 403) {
+                if (response.status == 403) {
+                    toast.error('You do not have permission to delete contact');
+                } else {
+                    setContacts(contacts.filter(contact => contact._id !== contactId));
+                    fetchContactDetails();
+                    toast.success('Contact deleted successfully!');
+                }
             } else {
                 toast.error('Error deleting contact:');
             }
@@ -150,11 +159,14 @@ const GroupContact = () => {
                 body: JSON.stringify({ ...newContact, groupId: id }),
             });
             const result = await response.json();
-            if (response.status) {
+            if (response.status==200) {
                 setContacts([result, ...contacts]); 
                 popupRemoveAddContact(); 
                 fetchContactDetails();
                 toast.success('Contact created successfully!');
+            } else if (response.status == 403) {
+                toast.error('You do not have permission to create contact');
+                popupRemoveAddContact(); 
             } else {
                 toast.error('Error creating contact:');
             }

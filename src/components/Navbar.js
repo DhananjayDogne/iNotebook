@@ -17,7 +17,7 @@ export const Navbar = () => {
     }
     return (
         <div className='navbar'>
-            <div className='logo'>CM</div>
+            <div className='logo'>{ localStorage.getItem("name") }</div>
             <div className='links'>
                 <Link className={`link ${location.pathname==='/'? "active": ""}`}   to='/'>Home</Link>
                 <Link className={`link ${location.pathname === '/about' ? "active" : ""}`} to='/about'>About</Link>

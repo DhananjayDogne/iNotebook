@@ -19,10 +19,11 @@ export const Signuppage = () => {
         });
         const json = await response.json();
         console.log(json);
-        if (json.success) {
+        if (response.status ==200) {
             //Save And Redirect To Home
-            localStorage.setItem("token", json.token)
-            localStorage.setItem("role", json.role)
+            localStorage.setItem("token", json.token);
+            localStorage.setItem("role", json.role);
+            localStorage.setItem("name", json.name);
             toast.success('Signup successfully!');
             navigate('/');
         } else {

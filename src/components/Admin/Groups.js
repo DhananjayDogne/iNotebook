@@ -12,74 +12,9 @@ export const Groups = () => {
     const [isUserModalOpen, setIsUserModalOpen] = useState(false);  // Modal to add users to a group
     const [groupName, setGroupName] = useState('');
     const [currentGroupId, setCurrentGroupId] = useState(null);  // State for storing current group ID
+    const [permission, setPermission] = useState('CRUD');
 
-    // Fetch groups and users
-    useEffect(() => {
-        const fetchGroups = async () => {
-            try {
-                const response = await fetch(`${process.env.REACT_APP_HOSTURL}/api/group/fetchallgroups`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'auth-token': localStorage.getItem('token'),
-                    },
-                });
-                const json = await response.json();
-                setGroups(json);
-                toast.success("Groups fetched successfully");
-            } catch (error) {
-                toast.error(`Error fetching groups:${ error.message}`);
-            }
-        };
-
-        const fetchUsers = async () => {
-            try {
-                const response = await fetch(`${process.env.REACT_APP_HOSTURL}/api/admin/fetchalluser`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'auth-token': localStorage.getItem('token'),
-                    },
-                });
-                const json = await response.json();
-                if (json.error) {
-                    toast.error(`Error fetching users: ${json.message}`);
-                } else {
-                    setUsers(json);
-                    toast.success("Users fetched successfully");
-                }
-            } catch (error) {
-                toast.error(   `Error fetching users:  ${error.message}`);
-            }
-        };
-
-        const fetchPersonalGroups = async () => {
-            try {
-                const response = await fetch(`${process.env.REACT_APP_HOSTURL}/api/group/fetchpersonalgroups`, {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'auth-token': localStorage.getItem('token'),
-                    },
-                });
-                const json = await response.json();
-                console.log(json);
-                setGroups(json);
-                toast.success("Groups fetched successfully");
-            } catch (e) {
-                console.error('Error fetching personal groups:', e.message);
-            }
-        };
-
-
-        if (localStorage.getItem('role') == 'admin') {
-            fetchGroups();
-            fetchUsers();
-        }
-        else {
-            fetchPersonalGroups();
-        }
-    }, []);
+   
 
     const openModal = () => setIsModalOpen(true);
     const closeModal = () => {
@@ -113,7 +48,7 @@ export const Groups = () => {
 
             const json = await response.json();
             // console.log(json);
-            if (json) {
+            if (json.status === 200) {
                 setGroups((prevGroups) => [...prevGroups, json]);
                 closeModal();
             }
@@ -130,13 +65,24 @@ export const Groups = () => {
         }
     };
 
+    // Function to handle permission change
+    const handlePermissionChange =  (p,flg) => { 
+        if (flg) {
+             setPermission(permission + p);
+        } else { 
+             setPermission(permission.replace(p, ''));
+        }
+        console.log(permission , p,flg);
+       
+    }
+
+
     const handleAddUsersToGroup = async () => {
         if (selectedUsers.length === 0) {
             alert("Please select at least one user");
             return;
         }
-        // console.log(selectedUsers);
-
+        
         try {
             const response = await fetch(`${process.env.REACT_APP_HOSTURL}/api/group/addusertogroup/${currentGroupId}`, {
                 method: 'PUT',
@@ -144,7 +90,7 @@ export const Groups = () => {
                     'Content-Type': 'application/json',
                     'auth-token': localStorage.getItem('token'),
                 },
-                body: JSON.stringify({ users: selectedUsers }),
+                body: JSON.stringify({ users: selectedUsers,permission:permission }),
             });
 
             const json = await response.json();
@@ -160,6 +106,71 @@ export const Groups = () => {
             toast.error(`Error adding users: ${error.message}`);
         }
     };
+
+    useEffect(() => {
+        const fetchGroups = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_HOSTURL}/api/group/fetchallgroups`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'auth-token': localStorage.getItem('token'),
+                    },
+                });
+                const json = await response.json();
+                setGroups(json);
+            } catch (error) {
+                toast.error(`Error fetching groups:${error.message}`);
+            }
+        };
+
+        const fetchUsers = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_HOSTURL}/api/admin/fetchalluser`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'auth-token': localStorage.getItem('token'),
+                    },
+                });
+                const json = await response.json();
+                if (json.error) {
+                    toast.error(`Error fetching users: ${json.message}`);
+                } else {
+                    setUsers(json);
+                }
+            } catch (error) {
+                toast.error(`Error fetching users:  ${error.message}`);
+            }
+        };
+
+        const fetchPersonalGroups = async () => {
+            try {
+                const response = await fetch(`${process.env.REACT_APP_HOSTURL}/api/group/fetchpersonalgroups`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'auth-token': localStorage.getItem('token'),
+                    },
+                });
+                const json = await response.json();
+                console.log(json);
+                setGroups(json);
+            } catch (e) {
+                console.error('Error fetching personal groups:', e.message);
+            }
+        };
+
+
+        if (localStorage.getItem('role') == 'admin') {
+            fetchGroups();
+            fetchUsers();
+        }
+        else {
+            fetchPersonalGroups();
+            fetchUsers();
+        }
+    }, []);
 
     return (
         <div className="groups-page-container">
@@ -179,7 +190,7 @@ export const Groups = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        {groups.map((group) => (
+                            {groups.map((group) => (
                             <tr key={group._id}>
                                 <td>{group.name}</td>
                                 <td>{group.date}</td>
@@ -228,6 +239,22 @@ export const Groups = () => {
                                 <label htmlFor={`user-${user._id}`}>{user.name}</label>
                             </div>
                         ))}
+
+                        <div className="permissions">
+                            <h4>Permissions : </h4>
+                            {['C', 'R', 'U', 'D'].map(p => (
+                                <label key={p} className='permission-label'>
+                                    <input
+                                        type="checkbox"
+                                        checked={permission.includes(p)}
+                                        onChange={permission.includes(p) ? () => handlePermissionChange(p,false) : () => handlePermissionChange(p,true)}
+                                    />
+                                    {p}
+                                </label>
+                            ))}
+                            {permission}
+                        </div>
+
                         <button className="modal-action-btn" onClick={handleAddUsersToGroup}>Add Users</button>
                         <button className="modal-cancel-btn" onClick={closeUserModal}>Cancel</button>
                     </div>

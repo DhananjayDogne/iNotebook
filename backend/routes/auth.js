@@ -35,7 +35,9 @@ router.post('/createUser', [
             name: req.body.name,
             email: req.body.email,
             password: secPass,
-            role:'user'
+            role: 'user',
+            group: [],
+            groupperminsion: [], 
         });
 
         //Creating a token for authentication
@@ -48,7 +50,7 @@ router.post('/createUser', [
        
         const authtoken = jwt.sign(data, JWT_SECRET);
         success = true;
-        res.send({ success: success, token: authtoken ,role:user.role});
+        res.status(200).send({ name: user.name, token: authtoken ,role:user.role});
     }
     catch (error) {
         console.log(error.message);
@@ -88,7 +90,7 @@ router.post('/login', [
         }
         const authtoken = jwt.sign(data, JWT_SECRET);
         success = true;
-        res.send({ success: success , token:authtoken ,role:user.role});
+        res.status(200).send({ name: user.name , token:authtoken ,role:user.role});
     }
     catch (error) { 
         console.log(error.message);
@@ -103,7 +105,7 @@ router.get('/getuser',fetchuser, async (req, res) => {
     try {
         const userId = req.user.id;
         const user = await User.findById(userId).select("-password");
-        res.send({user});
+        res.status(200).send({user});
     }
     catch (error) {
         console.log(error.message);

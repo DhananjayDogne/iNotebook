@@ -6,11 +6,11 @@ export const AdminHome = () => {
     const navigate = useNavigate();
 
     const goToUserList = () => {
-        navigate('/admin/users'); // Navigate to the user list page
+        navigate('/admin/users'); 
     };
 
     const goToGroupList = () => {
-        navigate('/admin/groups'); // Navigate to the group list page
+        navigate('/admin/groups'); 
     };
 
     return (

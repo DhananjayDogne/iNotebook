@@ -4,12 +4,12 @@
     const ContactSchema = new Schema({
         user: {
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'user'
+            ref: 'user',
+            
         },
         group: {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'group',
-            default: 'General'
         },
         name: {
             type: String,

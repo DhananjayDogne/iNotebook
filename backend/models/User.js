@@ -19,9 +19,14 @@ const UserSchema = new Schema({
         default: 'user'
     },
     group: [{
-        type: Schema.Types.ObjectId,
-        ref: 'group',
-        // permissions: [0,1,2,3]
+        groupId: {
+            type: Schema.Types.ObjectId,
+            ref: 'group',
+        },
+        permission: {
+            type: String,
+            default: 'CRUD'
+        }
     }],
     date: {
         type: Date,

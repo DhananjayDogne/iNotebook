@@ -16,10 +16,9 @@ export const Users = () => {
                     "auth-token": localStorage.getItem('token'),
                 },
             });
-
+            
             const json = await response.json();
             setUserlist(json);
-            toast.success("Userlist fetched successfully");
         } catch (error) {
             toast.error(`Error fetching users:${error.message}`);
         }
