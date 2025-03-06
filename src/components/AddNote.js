@@ -1,10 +1,12 @@
 import React, { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import "./AddNote.css";
 
 import NoteContext from "../context/notes/NoteContext";
 
 export const AddNote = () => {
     const { addNotes, fetchNotes } = useContext(NoteContext);
+    const navigate = useNavigate();
     const [note, setNote] = useState({
         name: "",
         email: "",
@@ -18,6 +20,7 @@ export const AddNote = () => {
         addNotes(note.name, note.email, note.mobile, note.mother, note.father, note.address);
         setNote({ name: "", email: "", mobile: "", mother: "", father: "", address: "" }); 
         fetchNotes(); 
+        navigate('/');
     }
 
     const onChange = (e) => {
@@ -27,7 +30,7 @@ export const AddNote = () => {
 
     return (
         <div className='adduser'>
-            <h1>Add a User</h1>
+            <h1>Add Contact</h1>
             <div className='form_container'>
                 <form className='form_body'>
                     <div className='row'>

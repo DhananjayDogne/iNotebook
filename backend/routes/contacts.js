@@ -9,7 +9,7 @@ router.get('/fetchallcontact', fetchuser, async (req, res) => {
     try {
         const contacts = await Contact.find({ user: req.user.id });
         console.log(contacts);
-        res.json(contacts)
+        res.status(200).json(contacts)
     }
     catch (error) {
         console.log(error.message);
@@ -19,10 +19,7 @@ router.get('/fetchallcontact', fetchuser, async (req, res) => {
 })
 
 //Route 2 :Add a new contact using: POST "/api/contacts/addcontact". Login required
-router.post('/addcontact', fetchuser, [
-    body('name', 'Please add minimum 3 character title').isLength({min:3}),
-    body('mobile', 'Please add description atleat 5 characters').isLength({ min: 10 }),
-], async (req, res) => {
+router.post('/addcontact', fetchuser, async (req, res) => {
     //Error check for input description
     try {
         const errors = validationResult(req);
@@ -36,7 +33,7 @@ router.post('/addcontact', fetchuser, [
             name, email, mobile, mother, father, address, user: req.user.id
         })
         const savedcontact = await contact.save();
-        res.json(savedcontact);
+        res.status(200).json(savedcontact);
     }
     catch (error) {
         console.log(error.message);
@@ -63,7 +60,7 @@ router.put('/updatecontact/:id', fetchuser, async (req, res) => {
         if (!contact) { return res.status(404).send("Not Found"); }
         if (req.user.role === 'admin' || contact.user.toString() === req.user.id) {
             contact = await Contact.findByIdAndUpdate(req.params.id, { $set: newContact }, { new: true });
-            res.send({ contact });
+            res.status(200).send({ contact });
         } else {
             return res.status(401).send("Not Allowed");
         }
@@ -85,7 +82,7 @@ router.delete('/delete/:id', fetchuser, async (req, res) => {
         if (req.user.role === 'admin' || contact.user.toString() === req.user.id) {
 
             contact = await Contact.findByIdAndDelete(req.params.id);
-            res.send({ "Success": "Notes Deleted Successfuly", contact: contact });
+            res.status(200).send({ "Success": "Notes Deleted Successfuly", contact: contact });
         }
         return res.status(401).send("Not Allowed");
     

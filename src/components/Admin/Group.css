@@ -140,3 +140,48 @@
     outline: none;
     border-color: #007BFF;
 }
+/* Permissions Section */
+.permissions {
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #f4f4f4;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.permissions h4 {
+    margin-bottom: 12px;
+    font-weight: 600;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Style for each permission label */
+.permission-label {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 15px;
+    margin-bottom: 10px;
+    cursor: pointer;
+}
+
+.permission-checkbox {
+    margin-right: 8px;
+    transform: scale(1.2);
+    /* Makes the checkbox a bit larger */
+}
+
+/* Permission Text */
+.permission-text {
+    font-size: 14px;
+    color: #555;
+    transition: color 0.2s ease-in-out;
+}
+
+.permission-text.active {
+    font-weight: 600;
+    color: #4CAF50;
+}
+
+.permission-label:hover .permission-text {
+    color: #007bff;
+}

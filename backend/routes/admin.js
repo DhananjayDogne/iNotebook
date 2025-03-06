@@ -11,11 +11,11 @@ const jwt = require('jsonwebtoken');
 
 
 //Route 1 :Get all the users using: GET "/api/admin/fetchalluser". Login required (admin)
-router.get('/fetchalluser', fetchuser,checkadmin, async (req, res) => {
+router.get('/fetchalluser', fetchuser, async (req, res) => {
     try {
         const users = await User.find({});
         // console.log(users);
-        res.json(users);
+        res.status(200).json(users);
     }
     catch (error) {
         console.log(error.message);
@@ -29,7 +29,7 @@ router.get('/fetchcontact/:id', fetchuser, checkadmin, async (req, res) => {
     try {
         const id=req.params.id;
         const contactofUser = await Contact.find({ user: id });
-        res.json(contactofUser);
+        res.status(200).json(contactofUser);
     }
     catch (error) {
         console.log(error.message);
@@ -59,7 +59,7 @@ router.put('/updateuser/:id', fetchuser,checkadmin, async (req, res) => {
         if (!user) { return res.status(404).send("Not Found"); }
         
         user = await User.findByIdAndUpdate(req.params.id, { $set: newUser }, { new: true });
-        res.send({ user });
+        res.status(200).send({ user });
 
     } catch (error) {
         console.log(error.message);
@@ -77,7 +77,7 @@ router.delete('/deleteuser/:id', fetchuser, async (req, res) => {
 
 
         user = await User.findByIdAndDelete(req.params.id);
-        res.send({ "Success": "Notes Deleted Successfuly", user: user });
+        res.status(200).send({ "Success": "Notes Deleted Successfuly", user: user });
         
         // return res.status(401).send("Not Allowed");
 

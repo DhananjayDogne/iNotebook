@@ -22,7 +22,7 @@ const NoteState = (props) => {
 
             const result = await note.json();
 
-            if (note.ok) {
+            if (result.status == 200) {
                 setNotes(notes.concat(result));
                 toast.success('Contact added successfully!');
             } else {
@@ -47,7 +47,7 @@ const NoteState = (props) => {
 
             const json = await response.json();
 
-            if (response.ok) {
+            if (response.status == 200) {
                 const updatedNotes = notes.map((note) =>
                     note._id === id ? { ...note, name, email, mobile, mother, father, address } : note
                 );
@@ -74,7 +74,7 @@ const NoteState = (props) => {
 
             const json = await response.json();
 
-            if (response.ok) {
+            if (response.status == 200) {
                 setNotes(notes.filter((note) => note._id !== id));
                 toast.success('Contact deleted successfully!');
             } else {
@@ -98,9 +98,8 @@ const NoteState = (props) => {
 
             const json = await response.json();
 
-            if (response.ok) {
+            if (response.status==200) {
                 setNotes(json);
-                toast.success('Contacts fetched successfully!');
             } else {
                 toast.error(`Error: ${json.message || 'Failed to fetch contacts'}`);
             }

@@ -19,7 +19,7 @@ const GroupSchema = new Schema({
     contacts: [{
         type: Schema.Types.ObjectId,
         ref: 'contacts', 
-        // required: true
+        required: true
     }],
     date: {
         type: Date,

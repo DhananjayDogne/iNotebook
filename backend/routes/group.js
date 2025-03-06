@@ -53,10 +53,10 @@ router.post('/creategroup',fetchuser, async (req, res) => {
 
         const group = await newGroup.save();
         
-        await user.group.push(group._id);
+        user.group.push({ groupId: group._id, permissions: "CRUD" });
         await user.save();
 
-        res.status(201).json(newGroup);
+        res.status(200).json(newGroup);
 
     } catch (error) {
         res.status(400).json({ message: 'Error creating group', error });
@@ -64,15 +64,25 @@ router.post('/creategroup',fetchuser, async (req, res) => {
 });
 
 // edit group contact
-router.put('/editcontact/:id', async (req, res) => {
+router.put('/editcontact/:id/:groupId',fetchuser, async (req, res) => {
     try {
         const id = req.params.id;
+        const groupId = req.params.groupId;
+        // check if user have permission to edit contact
+        const user =await User.findById(req.user.id);
+        const grpperm = user.group.find((ele) => ele.groupId.toString() === groupId.toString())
+        
+
+        if (!grpperm || !grpperm.permission.includes('U')) {
+            return res.status(403).json({ message: 'You do not have permission to edit contact' });
+        }
+
         const { name, email, mobile, mother, father, address } = req.body;
 
         if (!name || !email || !mobile) {
             return res.status(400).json({ message: 'Name, Email, and Mobile are required' });
         }
-
+        
         const updatedContact = await Contact.findByIdAndUpdate(
             id,
             { name, email, mobile, mother, father, address },
@@ -91,10 +101,20 @@ router.put('/editcontact/:id', async (req, res) => {
     }
 });
 
-
-router.delete('/contact/:id', async (req, res) => {
+// delete the contact from group
+router.delete('/contact/:id/:groupId',fetchuser, async (req, res) => {
     try {
         const id = req.params.id;
+
+        // check if user have permission to delete contact
+        const user = await User.findById(req.user.id);
+        const groupId=req.params.groupId;
+        const grpperm =  user.group.find(ele => ele.groupId.toString() === groupId.toString())
+        console.log(grpperm);
+        if (!grpperm || !grpperm.permission.includes('D')) {
+            return res.status(403).json({ message: 'You do not have permission to edit contact' });
+        }
+
         const contact = await Contact.findByIdAndDelete(id);
 
         if (!contact) {
@@ -111,10 +131,13 @@ router.delete('/contact/:id', async (req, res) => {
 // Add multiple users to an existing group
 router.put('/addusertogroup/:id', async (req, res) => {
     try {
-        const { users } = req.body;  // Expecting an array of user IDs
-        
+       
+        const users = req.body.users;  
+        const permission = req.body.permission; 
+        console.log(permission);
         const groupId = req.params.id;
         const group = await Group.findById(groupId);
+
         if (!group) {
             return res.status(404).json({ message: 'Group not found' });
         }
@@ -130,10 +153,14 @@ router.put('/addusertogroup/:id', async (req, res) => {
                     return res.status(404).json({ message: `User with ID ${userId} not found` });
                 }
 
-                if (!user.group.includes(groupId)) {
-                    user.group.push(groupId);
-                    await user.save();  
-                }
+                // const grp=user.group.find((ele) => ele.groupId === userId);
+                // if (grp && grp.length) {
+                    user.group.push({
+                        groupId: groupId , permission:  permission 
+                    });
+                    // user.groupperminsion.push({ permission });
+                    await user.save(); 
+                // }
             }
         }
 
@@ -152,7 +179,22 @@ router.put('/addusertogroup/:id', async (req, res) => {
 router.post('/createcontact', fetchuser, async (req, res) => {
     // console.log(req.body);
     try {
+        // check if user have permission to edit contact
         const { name, email, mobile, address, mother, father, groupId } = req.body;
+
+        const user =await User.findById(req.user.id);
+        
+        if (!user.group || !Array.isArray(user.group)) {
+            return res.status(400).json({ message: 'User groups not found or invalid' });
+        }
+        
+        const grpperm = user.group.find((ele) => ele.groupId.toString() === groupId.toString());
+        console.log(grpperm);
+        if (!grpperm || !grpperm.permission.includes('C')) {
+            return res.status(403).send({ message: 'You do not have permission to add contact' });
+        }
+        
+
 
         if (!name || !email || !mobile || !groupId ) {
             return res.status(400).json({ message: 'Please provide all required fields' });
@@ -163,13 +205,10 @@ router.post('/createcontact', fetchuser, async (req, res) => {
             return res.status(404).json({ message: 'Group not found' });
         }
 
-        const user = await User.findById(req.user.id);
-        if (!user) {
-            return res.status(404).json({ message: 'User not found' });
-        }
+       
 
         const newContact = new Contact({
-            user: req.user.id,  
+            
             group: groupId, 
             name,
             email,
@@ -182,8 +221,8 @@ router.post('/createcontact', fetchuser, async (req, res) => {
         const contact = await newContact.save();
         group.contacts.push(contact._id);
         await group.save();
-        console.log('Contact added successfully', contact);
-        res.status(201).json({ message: 'Contact added successfully', contact });
+        // console.log('Contact added successfully', contact);
+        res.status(200).json({ message: 'Contact added successfully', contact });
 
     } catch (error) {
         console.error('Error creating contact:', error);
@@ -219,8 +258,10 @@ router.get('/fetchpersonalgroups',fetchuser, async (req, res) => {
         }
         const groupdetail = [];
         for (const group of groups) { 
-            groupdetail.push(await Group.findById(group));
+            const grp=await Group.findById(group.groupId);
+            if(grp!=null)groupdetail.push(await Group.findById(group.groupId));
         }
+        console.log(groupdetail);
 
         res.status(200).json(groupdetail);
     } catch (error) {
